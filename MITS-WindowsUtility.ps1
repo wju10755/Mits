@@ -2155,7 +2155,7 @@ Function Invoke-WPFFormVariables {
     Write-Host "M::::::M               M::::::MI::::::::I      T:::::::::T      S:::::::::::::::SS " -ForegroundColor "Red"
     Write-Host "MMMMMMMM               MMMMMMMMIIIIIIIIII      TTTTTTTTTTT       SSSSSSSSSSSSSSS   " -ForegroundColor "Red"
     Write-Host ""
-    Write-Host "=====MITS Windows Utility Launcher=====" -ForegroundColor "Yellow"
+    Write-Host "=====MITS Windows Utility Launcher=====" -ForegroundColor "Yellow" 
     Start-Sleep -Seconds 2
     #====DEBUG GUI Elements====
 
