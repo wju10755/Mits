@@ -15,6 +15,9 @@ $setup = "c:\temp\scuba\setup.ps1"
 
 $opaFile = "$scubaDir\opa.exe"
 
+$ProgressPreference = 'Continue'
+
+
 $null = Set-ExecutionPolicy Bypass -Scope Process -Force 
 clear-host
 function Print-Middle( $Message, $Color = "White" )
