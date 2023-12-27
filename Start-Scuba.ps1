@@ -25,10 +25,10 @@ function Print-Middle( $Message, $Color = "White" )
 # Print Script Title
 #################################
 $Padding = ("=" * [System.Console]::BufferWidth);
-Write-Host -ForegroundColor "Blue" $Padding -NoNewline;
+Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 #Write-Host -ForegroundColor "Red" "MITS - CISA Known Exploite Vulnerability Scanner";
-Print-Middle "CISA - Secure Cloud Business Applications (SCuBA)"
-Write-Host -ForegroundColor "Blue" $Padding;
+Print-Middle "MITS - CISA SCuBA Baseline Report"
+Write-Host -ForegroundColor "Red" $Padding;
 Write-Host `n
 
 
