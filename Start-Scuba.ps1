@@ -68,7 +68,7 @@ Import-Module "$scubaDir\powershell\scubagear\ScubaGear.psd1"
 # Run Invoke-SCuBA
 Invoke-SCuBA
 
-# Run Invoke-SCuBA and wait for it to complete
+# Run Invoke-SCuBA and wait for it to completee
 #Start-Process powershell.exe "-Command Invoke-SCuBA" -Wait -NoNewWindow
 
 
