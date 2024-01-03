@@ -1,3 +1,18 @@
+$null = Set-ExecutionPolicy Bypass -Scope Process -Force 
+clear-host
+function Print-Middle( $Message, $Color = "White" )
+{
+    Write-Host ( " " * [System.Math]::Floor( ( [System.Console]::BufferWidth / 2 ) - ( $Message.Length / 2 ) ) ) -NoNewline;
+    Write-Host -ForegroundColor $Color $Message;
+}
+# Print Script Title
+#################################
+$Padding = ("=" * [System.Console]::BufferWidth);
+Write-Host -ForegroundColor "Blue" $Padding -NoNewline;
+Print-Middle "CISA - Security Baseline Conformance Reports"
+Write-Host -ForegroundColor "Blue" $Padding;
+Write-Host `n
+
 # Define the URL for the latest release of ScubaGear
 $scubaGearUrl = "https://codeload.github.com/cisagov/ScubaGear/zip/refs/heads/main"
 
@@ -15,34 +30,26 @@ $setup = "c:\temp\scuba\setup.ps1"
 
 $opaFile = "$scubaDir\opa.exe"
 
-$ProgressPreference = 'Continue'
-
-
-$null = Set-ExecutionPolicy Bypass -Scope Process -Force 
-clear-host
-function Print-Middle( $Message, $Color = "White" )
-{
-    Write-Host ( " " * [System.Math]::Floor( ( [System.Console]::BufferWidth / 2 ) - ( $Message.Length / 2 ) ) ) -NoNewline;
-    Write-Host -ForegroundColor $Color $Message;
-}
-# Print Script Title
-#################################
-$Padding = ("=" * [System.Console]::BufferWidth);
-Write-Host -ForegroundColor "Blue" $Padding -NoNewline;
-Print-Middle "CISA - Security Baseline Conformance Reports"
-Write-Host -ForegroundColor "Blue" $Padding;
-Write-Host `n
-
-
 # Create the ScubaGear installation directory if it doesn't exist
 if (-not (Test-Path $scubaDir)) {
     New-Item -ItemType Directory -Path $scubaDir | Out-Null
 }
 
 # Download the latest release of ScubaGear and extract it to the installation directory
-if (!(Test-Path $scubafile)) {
-    Invoke-WebRequest -Uri $scubaGearUrl -OutFile "c:\temp\scuba.zip"
-}
+if (!(Test-Path $tempZipFile)){
+    Write-Host "Downloading latest ScubaGear release..." -NoNewline
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $tempZipFile
+    $expectedHash = "720174A04ACC2D80024202CE964E5795EB51E4413ED442A5169BDD26B2225822"
+    $expectedSize = 2584525 
+    $actualHash = Get-FileHash "$tempZipFile" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+    $actualSize = (Get-Item "$tempZipFile").Length
+    if ($expectedHash -eq $actualHash -and $expectedSize -eq $actualSize) {
+        Write-Host " done." -ForegroundColor Green
+    } else {
+        Write-Error " failed. The downloaded file hash or size does not match the expected values."
+    }
+}    
+
 
 $RequiredModulesPath = Join-Path -Path $PSScriptRoot -ChildPath "PowerShell\ScubaGear\RequiredVersions.ps1"
 if (Test-Path -Path $RequiredModulesPath) {
@@ -55,7 +62,7 @@ if (-not (Test-Path $setup)) {
  
 }
 
-# Install the required modules
+# Set Working Directory
 Set-Location $scubaDir
 
 if (-not(Test-Path $RequiredModulesPath)) {
@@ -65,7 +72,17 @@ if (-not(Test-Path $RequiredModulesPath)) {
 
 # Download OPA and save it to the installation directory
 if (-not(Test-Path $opaFile)) {
-    Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"    
+    Write-Host "Downloading Open Policy Agent..." -NoNewline
+    Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"
+    $expectedHash = "8E20B4FCD6B8094BE186D8C9EC5596477FB7CB689B340D285865CB716C3C8EA7"
+    $expectedSize = 91104854 
+    $actualHash = Get-FileHash "$scubaDir\opa.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+    $actualSize = (Get-Item "$scubaDir\opa.exe").Length
+    if ($expectedHash -eq $actualHash -and $expectedSize -eq $actualSize) {
+        Write-Host " done." -ForegroundColor Green
+    } else {
+        Write-Error " failed. The downloaded file hash or size does not match the expected values."
+    }
 }
 
 # Import the ScubaGear module
