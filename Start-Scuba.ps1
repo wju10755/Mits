@@ -48,6 +48,7 @@ if (Test-Path -Path $RequiredModulesPath) {
 if (-not (Test-Path $setup)) {
     Expand-Archive -Path $scubafile -DestinationPath $scubaDir -Force
     Move-Item -Path "$scubaDir\ScubaGear-main\*" -Destination "c:\temp\scuba\" -Force
+    Remove-Item "$scubaDir\ScubaGear-main"
  
 }
 
