@@ -1,5 +1,5 @@
 # Define the URL for the latest release of ScubaGear
-$scubaGearUrl = "https://advancestuff.hostedrmm.com/labtech/transfer/installers/scuba.zip"
+$scubaGearUrl = "https://codeload.github.com/cisagov/ScubaGear/zip/refs/heads/main"
 
 # Define the URL for the OPA download
 $opaUrl = "https://openpolicyagent.org/downloads/v0.60.0/opa_windows_amd64.exe"
@@ -50,7 +50,9 @@ if (Test-Path -Path $RequiredModulesPath) {
 }
 
 if (-not (Test-Path $setup)) {
-    Expand-Archive -Path $scubafile -DestinationPath $scubaDir -Force 
+    Expand-Archive -Path $scubafile -DestinationPath $scubaDir -Force
+    Move-Item -Path "$scubaDir\ScubaGear-main\*" -Destination "c:\temp\scuba\" -Force
+ 
 }
 
 # Install the required modules
