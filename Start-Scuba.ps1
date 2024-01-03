@@ -88,4 +88,5 @@ $ScubaReport = $mostRecentDir.FullName
 # Launch SCuBA Report
 Invoke-Item "$ScubaReport\baselinereports.html"
 
+Read-Host -Prompt "Press Enter to Exit"
 
