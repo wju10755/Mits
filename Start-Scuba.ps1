@@ -69,10 +69,6 @@ Import-Module "$scubaDir\powershell\scubagear\ScubaGear.psd1"
 # Run Invoke-SCuBA
 Invoke-SCuBA
 
-# Run Invoke-SCuBA and wait for it to completee
-#Start-Process powershell.exe "-Command Invoke-SCuBA" -Wait -NoNewWindow
-
-
 # Get the list of directories in the Scuba directory that include "M365BaselineConformance"
 $reportDirs = Get-ChildItem -Path "$scubaDir\M365BaselineConformance*" -Directory
 
