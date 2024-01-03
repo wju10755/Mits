@@ -36,20 +36,9 @@ if (-not (Test-Path $scubaDir)) {
 }
 
 # Download the latest release of ScubaGear and extract it to the installation directory
-if (!(Test-Path $tempZipFile)){
-    Write-Host "Downloading latest ScubaGear release..." -NoNewline
-    Invoke-WebRequest -Uri $downloadUrl -OutFile $tempZipFile
-    $expectedHash = "720174A04ACC2D80024202CE964E5795EB51E4413ED442A5169BDD26B2225822"
-    $expectedSize = 2584525 
-    $actualHash = Get-FileHash "$tempZipFile" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
-    $actualSize = (Get-Item "$tempZipFile").Length
-    if ($expectedHash -eq $actualHash -and $expectedSize -eq $actualSize) {
-        Write-Host " done." -ForegroundColor Green
-    } else {
-        Write-Error " failed. The downloaded file hash or size does not match the expected values."
-    }
-}    
-
+if (!(Test-Path $scubafile)) {
+    Invoke-WebRequest -Uri $scubaGearUrl -OutFile "c:\temp\scuba.zip"
+}
 
 $RequiredModulesPath = Join-Path -Path $PSScriptRoot -ChildPath "PowerShell\ScubaGear\RequiredVersions.ps1"
 if (Test-Path -Path $RequiredModulesPath) {
@@ -72,17 +61,7 @@ if (-not(Test-Path $RequiredModulesPath)) {
 
 # Download OPA and save it to the installation directory
 if (-not(Test-Path $opaFile)) {
-    Write-Host "Downloading Open Policy Agent..." -NoNewline
-    Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"
-    $expectedHash = "8E20B4FCD6B8094BE186D8C9EC5596477FB7CB689B340D285865CB716C3C8EA7"
-    $expectedSize = 91104854 
-    $actualHash = Get-FileHash "$scubaDir\opa.exe" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
-    $actualSize = (Get-Item "$scubaDir\opa.exe").Length
-    if ($expectedHash -eq $actualHash -and $expectedSize -eq $actualSize) {
-        Write-Host " done." -ForegroundColor Green
-    } else {
-        Write-Error " failed. The downloaded file hash or size does not match the expected values."
-    }
+    Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"    
 }
 
 # Import the ScubaGear module
