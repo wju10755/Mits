@@ -40,7 +40,7 @@ if (!(Test-Path $scubafile)) {
     Invoke-WebRequest -Uri $scubaGearUrl -OutFile "c:\temp\scuba.zip"
 }
 
-$RequiredModulesPath = Join-Path -Path $PSScriptRoot -ChildPath "PowerShell\ScubaGear\RequiredVersions.ps1"
+$RequiredModulesPath = Join-Path -Path $scubaDir -ChildPath "PowerShell\ScubaGear\RequiredVersions.ps1"
 if (Test-Path -Path $RequiredModulesPath) {
   . $RequiredModulesPath
 }
