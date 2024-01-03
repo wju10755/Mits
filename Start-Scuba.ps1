@@ -35,9 +35,21 @@ if (-not (Test-Path $scubaDir)) {
     New-Item -ItemType Directory -Path $scubaDir | Out-Null
 }
 
+# Set Working Directory
+Set-Location $scubaDir
+
 # Download the latest release of ScubaGear and extract it to the installation directory
 if (!(Test-Path $scubafile)) {
+    Write-Host "Downloading latest CISA ScubaGear release..." -NoNewline
     Invoke-WebRequest -Uri $scubaGearUrl -OutFile "c:\temp\scuba.zip"
+    Write-Host " done." -ForegroundColor Green
+}
+
+# Download OPA and save it to the installation directory
+if (-not(Test-Path $opaFile)) {
+    Write-Host "Downloading Open Policy Agent Executable..." -NoNewline
+    #Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"    
+    Write-Host " done." -ForegroundColor Green
 }
 
 $RequiredModulesPath = Join-Path -Path $scubaDir -ChildPath "PowerShell\ScubaGear\RequiredVersions.ps1"
@@ -52,18 +64,10 @@ if (-not (Test-Path $setup)) {
  
 }
 
-# Set Working Directory
-Set-Location $scubaDir
-
 if (-not(Test-Path $RequiredModulesPath)) {
     .\setup.ps1
 }
 
-
-# Download OPA and save it to the installation directory
-if (-not(Test-Path $opaFile)) {
-    Invoke-WebRequest -Uri $opaUrl -OutFile "$scubaDir\opa.exe"    
-}
 
 # Import the ScubaGear module
 Import-Module "$scubaDir\powershell\scubagear\ScubaGear.psd1"
