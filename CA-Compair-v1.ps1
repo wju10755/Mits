@@ -4,7 +4,7 @@ $policies = Get-AzureADMSConditionalAccessPolicy
 $policy1 = Get-AzureADMSConditionalAccessPolicy | where {$_.Id -eq 'd3101fe1-2445-4180-9575-662e4f98a813'} | select Id
 
 # Retrieve policy by ID - M365 Lighthouse - Require MFA for Users
-$policy2 = Get-AzureADMSConditionalAccessPolicy | where {$_.Id -eq '91b04ea1-f0ed-45e6-acfd-7451b539b222'} | select Id
+$policy2 = Get-AzureADMSConditionalAccessPolicy | where {$_.Id -eq '71e5845d-72ea-4ef7-b70f-093314c22ecc'} | select Id
 
 # Convert the policies to JSON for easier comparison
 $jsonPolicy1 = $policy1 | ConvertTo-Json

@@ -7,12 +7,17 @@ $policy1 = $policies | Where-Object { $_.Id -eq 'd3101fe1-2445-4180-9575-662e4f9
 # Retrieve policy by ID - M365 Lighthouse - Require MFA for Users
 $policy2 = $policies | Where-Object { $_.Id -eq '91b04ea1-f0ed-45e6-acfd-7451b539b222' }
 
+# Retrieve policy by ID - M365 Lighthouse - Block Legacy Authentication
+$policy3 = $policies | Where-Object { $_.Id -eq '71e5845d-72ea-4ef7-b70f-093314c22ecc' }
+
+
 # Convert the policies to JSON for easier comparison
 $jsonPolicy1 = $policy1 | ConvertTo-Json
 $jsonPolicy2 = $policy2 | ConvertTo-Json
+$jsonPolicy3 = $policy3 | ConvertTo-Json
 
 # Compare the policies using Compare-Object
-$diff = Compare-Object ($policy1 | ConvertTo-Json -Depth 10 | ConvertFrom-Json) ($policy2 | ConvertTo-Json -Depth 10 | ConvertFrom-Json) -Property Name, State, Conditions, GrantControls, SessionControls -PassThru
+$diff = Compare-Object ($policy1 | ConvertTo-Json -Depth 10 | ConvertFrom-Json) ($policy2 | ConvertTo-Json -Depth 10 | ConvertFrom-Json) -Property Conditions, GrantControls, SessionControls -PassThru
 
 if ($diff) {
     Write-Host "The following differences were found between the two policies:"
