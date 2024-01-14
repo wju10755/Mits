@@ -1,4 +1,4 @@
-$DLProcmon = "Downloading Process Monitor..."
+$DLProcmon = "`nDownloading Process Monitor..."
 foreach ($Char in $DLProcmon.ToCharArray()) {
     [Console]::Write("$Char")
     Start-Sleep -Milliseconds 40
@@ -12,9 +12,9 @@ Invoke-WebRequest -Uri $url -OutFile $filePath
 [Console]::ResetColor()
 [Console]::WriteLine() 
 Expand-Archive $filePath -DestinationPath "c:\temp\ProcessMonitor"
-$DLProcmon = "Starting Process Monitor..."
+$DLProcmon = "Starting Process Monitor...`n"
 foreach ($Char in $DLProcmon.ToCharArray()) {
     [Console]::Write("$Char")
     Start-Sleep -Milliseconds 40
 }
-Start-Process -FilePath $filePath -ArgumentList "/AcceptEula" -WindowStyle Normal
+Start-Process -FilePath $file -ArgumentList "/AcceptEula" -WindowStyle Normal
