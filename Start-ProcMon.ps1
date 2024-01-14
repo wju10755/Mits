@@ -33,7 +33,7 @@ $ps = Start-Process $file -ArgumentList "/AcceptEula" -WindowStyle Normal
 $wshell = New-Object -ComObject wscript.shell
 Start-Sleep -Seconds 2
 $wshell.SendKeys("^a")
-#Start-Sleep -Seconds 2
+Start-Sleep -Seconds 2
 
 # Move Procmon left
 Add-Type @"
