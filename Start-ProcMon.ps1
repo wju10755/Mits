@@ -34,6 +34,10 @@ $wshell = New-Object -ComObject wscript.shell
 Start-Sleep -Seconds 2
 $wshell.SendKeys("^a")
 Start-Sleep -Seconds 2
+[Console]::ForegroundColor = [System.ConsoleColor]::Green
+[Console]::Write(" done.`n")
+[Console]::ResetColor()
+[Console]::WriteLine() 
 
 # Move Procmon left
 Add-Type @"
