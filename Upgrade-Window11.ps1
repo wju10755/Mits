@@ -157,11 +157,10 @@ try {
         Start-Sleep -Seconds 2500
         # What should i do after sleeping?
         # powershell code to wait unitl setuphost.exe exits
-         $setuphost = Get-Process setuphost
+         $setuphost = Get-Process setup*
          while ($setuphost -ne $null) {
              Write-Host "Waiting for setuphost.exe to exit..."
              Start-Sleep -Seconds 5
-             $setuphost = Get-Process setup*
          }
          Write-Host "Setup process has exited. Initial stage of upgrade is complete..."
          $choice = Read-Host "Do you want to reboot? (y/n)"
