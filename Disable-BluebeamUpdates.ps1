@@ -22,3 +22,5 @@ try {
 } catch {
     Write-Host "Failed to retrieve or update the registry key. Error: $_"
 }
+
+
