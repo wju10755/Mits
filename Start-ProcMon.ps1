@@ -1,3 +1,8 @@
+# Create temp directory
+if (!(Test-Path -Path C:\temp)) {
+    New-Item -ItemType directory -Path C:\temp
+}
+
 $DLProcmon = "`nDownloading Process Monitor..."
 foreach ($Char in $DLProcmon.ToCharArray()) {
     [Console]::Write("$Char")
