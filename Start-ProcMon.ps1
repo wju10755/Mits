@@ -6,7 +6,7 @@ if (!(Test-Path -Path C:\temp)) {
 $DLProcmon = "`nDownloading Process Monitor..."
 foreach ($Char in $DLProcmon.ToCharArray()) {
     [Console]::Write("$Char")
-    Start-Sleep -Milliseconds 40
+    Start-Sleep -Milliseconds 30
 }
 $url = "https://download.sysinternals.com/files/ProcessMonitor.zip"
 $filePath = "c:\temp\ProcessMonitor.zip"
@@ -19,7 +19,7 @@ Invoke-WebRequest -Uri $url -OutFile $filePath
 $Unzip = "Extracting Process Monitor..."
 foreach ($Char in $Unzip.ToCharArray()) {
     [Console]::Write("$Char")
-    Start-Sleep -Milliseconds 40
+    Start-Sleep -Milliseconds 30
 }
 Expand-Archive $filePath -DestinationPath "c:\temp\ProcessMonitor"
 [Console]::ForegroundColor = [System.ConsoleColor]::Green
@@ -29,7 +29,7 @@ Expand-Archive $filePath -DestinationPath "c:\temp\ProcessMonitor"
 $StartProcmon = "Starting Process Monitor...`n"
 foreach ($Char in $StartProcmon.ToCharArray()) {
     [Console]::Write("$Char")
-    Start-Sleep -Milliseconds 40
+    Start-Sleep -Milliseconds 30
 }
 #Start-Process -FilePath $file -ArgumentList "/AcceptEula" -WindowStyle Normal
 
