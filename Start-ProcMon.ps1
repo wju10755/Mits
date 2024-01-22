@@ -1,6 +1,6 @@
 # Create temp directory
 if (!(Test-Path -Path C:\temp)) {
-    New-Item -ItemType directory -Path C:\temp
+    New-Item -ItemType directory -Path C:\temp *> $null
 }
 
 $DLProcmon = "`nDownloading Process Monitor..."
