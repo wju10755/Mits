@@ -234,7 +234,7 @@ function Get-SSU {
                     Write-Warning "Windows Update Service cannot be started. Check status of WUAUSERV service, if it cannot run then will need to reset windows update components."
                 }
                 if ($process.ExitCode -eq 1641) {
-                    Write-Warning "System will now reboot."
+                    Write-Warning "System reboot initiated!"
                 } 
                 if ($process.ExitCode -eq 2359302) {
                     Write-Warning "Update is already installed, skipping."
@@ -275,7 +275,7 @@ function Get-FU {
                 Write-Warning "Windows Update Service cannot be started. Check status of WUAUSERV service, if it cannot run then will need to reset windows update components."
             }
             if ($process.ExitCode -eq 1641) {
-                Write-Warning "System will now reboot."
+                Write-Warning "System reboot initiated!"
             } 
             if ($process.ExitCode -eq 2359302) {
                 Write-Warning "Update is already installed, skipping."
@@ -315,7 +315,7 @@ function Get-CU {
                 Write-Warning "Windows Update Service cannot be started. Check status of WUAUSERV service, if it cannot run then will need to reset windows update components."
             }
             if ($process.ExitCode -eq 1641) {
-                Write-Warning "System will now reboot."
+                Write-Warning "System reboot initiated!"
             } 
             if ($process.ExitCode -eq 2359302) {
                 Write-Warning "Update is already installed, skipping."
@@ -355,7 +355,7 @@ function Get-DOTNET {
                 Write-Warning "Windows Update Service cannot be started. Check status of WUAUSERV service, if it cannot run then will need to reset windows update components."
             }
             if ($process.ExitCode -eq 1641) {
-                Write-Warning "System will now reboot."
+                Write-Warning "System reboot initiated!"
             } 
             if ($process.ExitCode -eq 2359302) {
                 Write-Warning "Update is already installed, skipping."
