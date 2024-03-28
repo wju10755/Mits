@@ -1,3 +1,9 @@
+$tmp = "c:\temp"
+if (-not (Test-Path $tmp)) {
+    Write-Host "Creating temp directory."
+    mkdir c:\temp | Out-Null
+}
+
 # Get the network share path
 $sharePath = Read-Host -Prompt "Enter UNC path to share (\\servername\sharename)"
 
