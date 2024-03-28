@@ -1,3 +1,20 @@
+clear-host
+function Print-Middle( $Message, $Color = "White" )
+{
+    Write-Host ( " " * [System.Math]::Floor( ( [System.Console]::BufferWidth / 2 ) - ( $Message.Length / 2 ) ) ) -NoNewline;
+    Write-Host -ForegroundColor $Color $Message;
+}
+# Print Script Title
+#################################
+$Padding = ("=" * [System.Console]::BufferWidth);
+Write-Host -ForegroundColor "Red" $Padding -NoNewline;
+Print-Middle "MITS - Shared Folder Permissions Report"
+Write-Host -ForegroundColor DarkRed "                                                      version 0.0.1";
+
+Write-Host -ForegroundColor "Red" $Padding;
+Write-Host `n
+
+
 $tmp = "c:\temp"
 if (-not (Test-Path $tmp)) {
     Write-Host "Creating temp directory."
