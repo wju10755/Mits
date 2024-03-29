@@ -2,8 +2,8 @@
 Import-Module ActiveDirectory
 
 # Specify the UNC path to the folder
-$folderPath = "\\SMC-FS01\Departments\Project Management"
-
+$folderPath = "\\SMC-FS01\Departments"
+#$folderPath = Read-Host -Prompt "Enter UNC path to share"
 # Get the folder name
 $folderName = Split-Path $folderPath -Leaf
 
