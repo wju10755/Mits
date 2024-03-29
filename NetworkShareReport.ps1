@@ -9,45 +9,93 @@ function Print-Middle( $Message, $Color = "White" )
 $Padding = ("=" * [System.Console]::BufferWidth);
 Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 Print-Middle "MITS - Shared Folder Permissions Report"
-Write-Host -ForegroundColor DarkRed "                                                      version 0.0.2";
+Write-Host -ForegroundColor DarkRed "                                                      version 0.0.1";
 
 Write-Host -ForegroundColor "Red" $Padding;
 Write-Host `n
 
-Write-Host "Checking for required modules..." -NoNewline
-# Check and Install NTFSSecurity Module if not found
-if (-not (Get-Module -Name 'NTFSSecurity' -ErrorAction SilentlyContinue)) {
-    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-    Install-Module -Name 'NTFSSecurity' -Force 3>$null | Out-Null
-    Import-Module -Name 'NTFSSecurity' -WarningAction SilentlyContinue
-}
-Write-Host " done."
+# Import the ActiveDirectory module
+Import-Module ActiveDirectory
 
+# Check for temp directory and create if not exist
 $tmp = "c:\temp"
 if (-not (Test-Path $tmp)) {
     Write-Host "Creating temp directory."
     mkdir c:\temp | Out-Null
 }
-Write-Host " "
-# Shared folder path
-$sharePath = Read-Host -Prompt "Enter UNC path to share"
-Write-Host "Processing share permissions..." -NoNewline
-# get all subfolders
-$Tree = Get-ChildItem -Path $sharePath -Recurse -Directory
-# Get NTFS permission for the root folder
-$NTFS = Get-NTFSAccess -Path $sharePath
-# Get the NTFS permissions for all sub folders (only explicit permissions, not inherited)
-$NTFS += foreach ($dir in $tree)
-    {
-     Get-NTFSAccess -Path $dir.fullName -ExcludeInherited
-    }
-Write-Host " done."
-Write-Host " "
-# In the $NTFS the first line are NTFS perm for the root folder, and after on NTFS perm for subfolders that differ from the root folder
-# And now export in the format you would like
-Write-Host "Output file location: $csvPath"
-$csvPath = "c:\temp\NTFS.csv"
-$Ntfs | Export-Csv -Path $csvPath -NoTypeInformation 
 
-# Open the exported CSV file
-explorer.exe /select,c:\temp\ntfs.csv
+# Specify the UNC path to the folder
+Write-Host -ForegroundColor Cyan "Enter UNC path to share " -NoNewline
+$folderPath = Read-Host
+
+# Get the folder name
+$folderName = $folderPath -split '\\' | Select-Object -Last 1
+
+# Get the subfolders
+$subfolders = Get-ChildItem -Path $folderPath -Directory
+
+# Create an array to store the results
+$results = @()
+
+# Output the folder name
+Write-Host " "
+Write-Host "UNC Path: " -NoNewline
+Write-Host -ForegroundColor Yellow $folderPath
+Write-Host "Processing subfolder: " -NoNewline
+Write-Host -ForegroundColor Yellow $folderName
+Start-Sleep -Seconds 1
+
+# For each subfolder, get and output the groups and members
+foreach ($subfolder in $subfolders) {
+    # Get the ACL for the subfolder
+    $acl = Get-Acl -Path $subfolder.FullName
+
+    # Get the unique groups assigned access to the subfolder
+    $groups = $acl.Access | Where-Object { $_.IdentityReference -notlike "*\SYSTEM" -and $_.IdentityReference -notlike "*\Administrator" -and $_.IdentityReference -notlike "BUILTIN\Administrators" -and $_.IdentityReference -notlike "CREATOR OWNER" -and $_.IdentityReference -ne "SMCINC\mitsadmin" -and $_.IdentityReference -ne "BUILTIN\Everyone" -and $_.IdentityReference -notmatch 'S-\d-\d+-(\d+-){1,14}\d+' } -ErrorAction SilentlyContinue | Select-Object -ExpandProperty IdentityReference -Unique
+    Write-Host " "
+    Write-Host " "
+    Write-Host "The following groups/members have permission to the subfolder " -NoNewline
+    Write-Host -ForegroundColor Yellow $subfolder.Name -NoNewline
+    Write-Host ": " -NoNewline
+    Write-Host -ForegroundColor Yellow " $($groups -join ', ')"
+    
+    # For each group, get and output the members
+    foreach ($group in $groups) {
+        # Get the group name
+        $groupName = $group.Value.Split('\')[-1]
+
+        try {
+            # Get the members of the group and sort them alphabetically
+            $members = Get-ADGroupMember -Identity $groupName -ErrorAction Stop | Where-Object { $_.SamAccountName -ne "Administrator" -and $_.SamAccountName -ne "SYSTEM" -and $_.SamAccountName -ne "mitsadmin" -and $_.SamAccountName -ne "Everyone"} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty SamAccountName | Sort-Object
+        }
+        catch {
+            continue
+        }
+        #Write-Host " "
+        Write-Host -ForegroundColor Yellow $groupname -NoNewline
+        Write-Host " Group Members:"
+        if ($members -eq $null -or $members -eq '') {
+            $members = "No group members assigned"
+        }
+        $members
+        Write-Host " "
+        if ($members -eq " ---No members assigned to this group--- ") {
+            #Write-Host " "
+            Write-Host "Failed to get members for group: " -NoNewline
+            Write-Host -ForegroundColor Red $groupName -NoNewline
+            Write-Host " (No group members or member is disabled)"
+            #Write-Host " "
+        }
+        # Create a custom object for the subfolder
+        $result = New-Object PSObject
+        $result | Add-Member -Type NoteProperty -Name "FolderName" -Value $subfolder.Name
+        $result | Add-Member -Type NoteProperty -Name "GroupName" -Value $groupName
+        $result | Add-Member -Type NoteProperty -Name "Members" -Value ($members -join ', ')
+
+        # Add the custom object to the array
+        $results += $result
+    }
+}
+
+# Export the array to a CSV file
+$results | Export-Csv -Path "C:\temp\SharePermissions.csv" -NoTypeInformation
