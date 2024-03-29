@@ -1,3 +1,4 @@
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 clear-host
 function Print-Middle( $Message, $Color = "White" )
 {
@@ -13,6 +14,7 @@ Write-Host -ForegroundColor DarkRed "                                           
 
 Write-Host -ForegroundColor "Red" $Padding;
 Write-Host `n
+
 
 
 $tmp = "c:\temp"
