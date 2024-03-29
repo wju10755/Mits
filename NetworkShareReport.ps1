@@ -27,7 +27,7 @@ if (-not (Test-Path $tmp)) {
 # Specify the UNC path to the folder
 Write-Host -ForegroundColor Cyan "Enter UNC path to share " -NoNewline
 $folderPath = Read-Host
-
+Write-Host " "
 # Get the folder name
 $folderName = $folderPath -split '\\' | Select-Object -Last 1
 
