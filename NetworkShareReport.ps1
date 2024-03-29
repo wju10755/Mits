@@ -99,3 +99,7 @@ foreach ($subfolder in $subfolders) {
 
 # Export the array to a CSV file
 $results | Export-Csv -Path "C:\temp\SharePermissions.csv" -NoTypeInformation
+Write-Host " "
+Write-Host -ForegroundColor Green "Shared folder permission report complete!"
+explorer.exe /select,c:\temp\SharePermissions.csv
+Write-Host " "
