@@ -9,7 +9,7 @@ function Print-Middle( $Message, $Color = "White" )
 $Padding = ("=" * [System.Console]::BufferWidth);
 Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 Print-Middle "MITS - Shared Folder Permissions Report"
-Write-Host -ForegroundColor DarkRed "                                                      version 0.0.1";
+Write-Host -ForegroundColor DarkRed "                                                      version 0.1.2";
 
 Write-Host -ForegroundColor "Red" $Padding;
 Write-Host `n
