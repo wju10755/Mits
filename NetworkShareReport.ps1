@@ -13,7 +13,7 @@ Write-Host -ForegroundColor DarkRed "                                           
 
 Write-Host -ForegroundColor "Red" $Padding;
 Write-Host `n
-
+Start-Sleep -Seconds 2
 # Import the ActiveDirectory module
 Import-Module ActiveDirectory
 
@@ -43,7 +43,7 @@ Write-Host "UNC Path: " -NoNewline
 Write-Host -ForegroundColor Yellow $folderPath
 Write-Host "Processing subfolder: " -NoNewline
 Write-Host -ForegroundColor Yellow $folderName
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 
 # For each subfolder, get and output the groups and members
 foreach ($subfolder in $subfolders) {
