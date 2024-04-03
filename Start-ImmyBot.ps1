@@ -65,10 +65,3 @@ Write-Host " "
 # Pause the script
 Write-Host "Press Enter to exit"
 Read-Host
-
-
-
-$ppkgPath = "c:\temp\EXISTING-mitsdev-ImmyAgentInstaller.ppkg"
-$provisioningEnginePath = "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Imaging and Configuration Designer\x86\ProvisioningEngine.exe"
-
-Invoke-Expression "& `"$provisioningEnginePath`" /c /p:`"$ppkgPath`""
