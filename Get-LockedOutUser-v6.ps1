@@ -1,3 +1,8 @@
+# Check if the script is being executed from a domain controller with the Active Directory role installed
+if ((Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain -eq $false) {
+    Write-Host "This script is intended to run on a domain controller with the Active Directory role installed! Exiting Script..." -ForegroundColor Red
+    exit
+}
 # Set console formatting
 function Print-Middle($Message, $Color = "White") {
     Write-Host (" " * [System.Math]::Floor(([System.Console]::BufferWidth / 2) - ($Message.Length / 2))) -NoNewline;
