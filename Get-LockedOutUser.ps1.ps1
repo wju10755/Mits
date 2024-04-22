@@ -70,7 +70,7 @@ foreach ($dc in $domainControllers) {
             LogName = 'Security'
             Id = 4625
         }
-        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1 -ComputerName $dc.HostName
+        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1 -ComputerName $dc.HostName -ErrorAction SilentlyContinue
 
         # Loop through the events and output the required information
         foreach ($event in $events) {
