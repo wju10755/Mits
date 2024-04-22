@@ -89,7 +89,9 @@ foreach ($dc in $domainControllers) {
                         $ipAddress = $data.'#text'
                         Write-Host "Scanning for available services on ${ipAddress}:"
                         foreach ($port in $popularPorts.Keys) {
+                            $ProgressPreference = 'SilentlyContinue'
                             $connection = Test-NetConnection -ComputerName $ipAddress -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
+                            $ProgressPreference = 'Continue'
                             if ($connection) {
                                 Write-Host "Port $port is open. Service: $($popularPorts[$port])"
                             }
