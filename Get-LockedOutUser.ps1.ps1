@@ -1,7 +1,8 @@
-cls
+Clear-Host
 # Check if the script is being executed from a domain controller with the Active Directory role installed
 if ((Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain -eq $false) {
-    Write-Host "This script is intended to run on a domain controller with the Active Directory role installed! Exiting Script..." -ForegroundColor Red
+    Write-Host -ForegroundColor Red "This script is intended to run on a domain controller with the Active Directory role installed! Exiting Script..."
+    Start-Sleep -seconds 10
     exit
 }
 
@@ -16,7 +17,7 @@ function Print-Middle($Message, $Color = "White") {
 $Padding = ("=" * [System.Console]::BufferWidth);
 Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 Print-Middle "MITS - Account Lockout Investigation Script";
-Write-Host -ForegroundColor Cyan "                                                   version 0.1.1";
+Write-Host -ForegroundColor Cyan "                                                   version 0.1.2";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
 
@@ -28,7 +29,7 @@ $lockedOutUsers = Search-ADAccount -LockedOut
 
 # Check if there are locked out users
 if ($lockedOutUsers.Count -eq 0) {
-    Write-Host "No locked accounts found.`n"
+    Write-Host -ForegroundColor Green "No account lockout events found.`n"
 } else {
     # Define the properties to exclude
     $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId')
@@ -87,8 +88,8 @@ if ($lockedOutUsers.Count -eq 0) {
                     }
                 }
             }
-
-            Write-Host ""
+            Write-Host " "
         }
     }
 }
+
