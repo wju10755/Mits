@@ -1,3 +1,4 @@
+cls
 # Check if the script is being executed from a domain controller with the Active Directory role installed
 if ((Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain -eq $false) {
     Write-Host "This script is intended to run on a domain controller with the Active Directory role installed! Exiting Script..." -ForegroundColor Red
