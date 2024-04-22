@@ -20,7 +20,12 @@ Print-Middle "MITS - Account Lockout Investigation Script";
 Write-Host -ForegroundColor Cyan "                                                   version 0.1.2";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
+
+# Error action handling 
 $ErrorActionPreference = "SilentlyContinue"
+$OriginalProgressPreference = $Global:ProgressPreference
+$Global:ProgressPreference = 'SilentlyContinue'
+
 # Import the Active Directory module
 Import-Module ActiveDirectory
 
@@ -89,9 +94,8 @@ foreach ($dc in $domainControllers) {
                         $ipAddress = $data.'#text'
                         Write-Host "Scanning for available services on ${ipAddress}:"
                         foreach ($port in $popularPorts.Keys) {
-                            $ProgressPreference = 'SilentlyContinue'
                             $connection = Test-NetConnection -ComputerName $ipAddress -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
-                            $ProgressPreference = 'Continue'
+                            $Global:ProgressPreference = $OriginalProgressPreference
                             if ($connection) {
                                 Write-Host "Port $port is open. Service: $($popularPorts[$port])"
                             }
