@@ -3,20 +3,6 @@ if ((Get-WmiObject -Class Win32_ComputerSystem).PartOfDomain -eq $false) {
     Write-Host "This script is intended to run on a domain controller with the Active Directory role installed! Exiting Script..." -ForegroundColor Red
     exit
 }
-# Set console formatting
-function Print-Middle($Message, $Color = "White") {
-    Write-Host (" " * [System.Math]::Floor(([System.Console]::BufferWidth / 2) - ($Message.Length / 2))) -NoNewline;
-    Write-Host -ForegroundColor $Color $Message;
-}
-
-# Print Script Title
-#################################
-$Padding = ("=" * [System.Console]::BufferWidth);
-Write-Host -ForegroundColor "Red" $Padding -NoNewline;
-Print-Middle "MITS - Account Lockout Investigation Script";
-Write-Host -ForegroundColor Cyan "                                                   version 0.0.6";
-Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
-Write-Host "  "
 
 # Import the Active Directory module
 Import-Module ActiveDirectory
@@ -50,12 +36,7 @@ $popularPorts = @{
 foreach ($user in $lockedOutUsers) {
     Write-Host "The account $($user.SamAccountName) is locked out."
 
-    # Get the last event with ID 4625 for this user
-    $filterHashTable = @{
-        LogName = 'Security'
-        Id = 4625
-    }
-    $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1
+    $events = Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625}
 
     # Loop through the events and output the required information
     foreach ($event in $events) {
