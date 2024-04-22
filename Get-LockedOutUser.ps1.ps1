@@ -17,7 +17,7 @@ function Print-Middle($Message, $Color = "White") {
 $Padding = ("=" * [System.Console]::BufferWidth);
 Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 Print-Middle "MITS - Account Lockout Investigation Script";
-Write-Host -ForegroundColor Cyan "                                                   version 0.1.4";
+Write-Host -ForegroundColor Cyan "                                                   version 0.1.3";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
 $ErrorActionPreference = "SilentlyContinue"
@@ -89,7 +89,7 @@ foreach ($dc in $domainControllers) {
                         $ipAddress = $data.'#text'
                         Write-Host "Scanning for available services on ${ipAddress}:"
                         foreach ($port in $popularPorts.Keys) {
-                            $connection = Test-NetConnection -ComputerName $ipAddress -Port $port -InformationLevel silent -WarningAction SilentlyContinue 
+                            $connection = Test-NetConnection -ComputerName $ipAddress -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue 
                             if ($connection) {
                                 Write-Host "Port $port is open. Service: $($popularPorts[$port])"
                             }
