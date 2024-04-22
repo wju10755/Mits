@@ -20,6 +20,7 @@ Print-Middle "MITS - Account Lockout Investigation Script";
 Write-Host -ForegroundColor Cyan "                                                   version 0.1.2";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
+$ErrorActionPreference = "SilentlyContinue"
 # Import the Active Directory module
 Import-Module ActiveDirectory
 
