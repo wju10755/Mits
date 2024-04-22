@@ -20,37 +20,45 @@ Print-Middle "MITS - Account Lockout Investigation Script";
 Write-Host -ForegroundColor Cyan "                                                   version 0.1.2";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
-
 # Import the Active Directory module
 Import-Module ActiveDirectory
 
-# Get all locked out users
-$lockedOutUsers = Search-ADAccount -LockedOut
+# Get all domain controllers
+$domainControllers = Get-ADDomainController -Filter *
 
-# Check if there are locked out users
-if ($lockedOutUsers.Count -eq 0) {
-    Write-Host -ForegroundColor Green "No account lockout events found.`n"
-} else {
-    # Define the properties to exclude
-    $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId', 'IpPort')
+# Define the properties to exclude
+$excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId', 'IpPort')
 
-    # Define the popular ports and their associated services
-    $popularPorts = @{
-        20 = 'FTP'
-        21 = 'FTP'
-        22 = 'SSH'
-        23 = 'Telnet'
-        25 = 'SMTP'
-        53 = 'DNS'
-        80 = 'HTTP'
-        110 = 'POP3'
-        143 = 'IMAP'
-        443 = 'HTTPS'
-        465 = 'SMTPS'
-        587 = 'SMTP'
-        993 = 'IMAPS'
-        995 = 'POP3S'
-        3389 = 'RDP'
+# Define the popular ports and their associated services
+$popularPorts = @{
+    20 = 'FTP'
+    21 = 'FTP'
+    22 = 'SSH'
+    23 = 'Telnet'
+    25 = 'SMTP'
+    53 = 'DNS'
+    80 = 'HTTP'
+    110 = 'POP3'
+    143 = 'IMAP'
+    443 = 'HTTPS'
+    465 = 'SMTPS'
+    587 = 'SMTP'
+    993 = 'IMAPS'
+    995 = 'POP3S'
+    3389 = 'RDP'
+}
+
+# Loop through the domain controllers
+foreach ($dc in $domainControllers) {
+    Write-Host "Checking domain controller $($dc.HostName)..."
+
+    # Get all locked out users
+    $lockedOutUsers = Search-ADAccount -LockedOut -Server $dc.HostName
+
+    # Check if there are locked out users
+    if ($lockedOutUsers.Count -eq 0) {
+        Write-Host -ForegroundColor Green "No account lockout events found on $($dc.HostName).`n"
+        continue
     }
 
     # Loop through the locked out users
@@ -62,7 +70,7 @@ if ($lockedOutUsers.Count -eq 0) {
             LogName = 'Security'
             Id = 4625
         }
-        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1
+        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1 -ComputerName $dc.HostName
 
         # Loop through the events and output the required information
         foreach ($event in $events) {
@@ -92,4 +100,3 @@ if ($lockedOutUsers.Count -eq 0) {
         }
     }
 }
-
