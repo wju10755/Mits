@@ -25,7 +25,7 @@ $ErrorActionPreference = "SilentlyContinue"
 Import-Module ActiveDirectory
 
 # Get all domain controllers
-$domainControllers = Get-ADDomainController -Filter *
+$domainControllers = Get-ADDomainController -Filter * | Out-Null
 
 # Define the properties to exclude
 $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId', 'IpPort')
