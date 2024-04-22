@@ -17,7 +17,7 @@ function Print-Middle($Message, $Color = "White") {
 $Padding = ("=" * [System.Console]::BufferWidth);
 Write-Host -ForegroundColor "Red" $Padding -NoNewline;
 Print-Middle "MITS - Account Lockout Investigation Script";
-Write-Host -ForegroundColor Cyan "                                                   version 0.1.3";
+Write-Host -ForegroundColor Cyan "                                                   version 0.1.4";
 Write-Host -ForegroundColor "Red" -NoNewline $Padding; 
 Write-Host "  "
 $ErrorActionPreference = "SilentlyContinue"
@@ -25,7 +25,7 @@ $ErrorActionPreference = "SilentlyContinue"
 Import-Module ActiveDirectory
 
 # Get all domain controllers
-$domainControllers = Get-ADDomainController -Filter *
+$domainControllers = Get-ADDomainController -Filter * | Out-Null
 
 # Define the properties to exclude
 $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId', 'IpPort')
@@ -71,7 +71,7 @@ foreach ($dc in $domainControllers) {
             LogName = 'Security'
             Id = 4625
         }
-        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1 -ComputerName $dc.HostName -ErrorAction SilentlyContinue
+        $events = Get-WinEvent -FilterHashtable $filterHashTable -MaxEvents 1 -ComputerName $dc.HostName
 
         # Loop through the events and output the required information
         foreach ($event in $events) {
