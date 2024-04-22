@@ -32,7 +32,7 @@ if ($lockedOutUsers.Count -eq 0) {
     Write-Host -ForegroundColor Green "No account lockout events found.`n"
 } else {
     # Define the properties to exclude
-    $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId')
+    $excludedProperties = @('SubjectUserSid', 'SubjectLogonId', 'TargetUserSid', 'Status', 'FailureReason', 'SubStatus', 'TransmittedServices', 'LmPackageName', 'KeyLength', 'ProcessId', 'IpPort')
 
     # Define the popular ports and their associated services
     $popularPorts = @{
